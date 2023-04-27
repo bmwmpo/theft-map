@@ -41,7 +41,7 @@ getApi=()=>{
 }
  
 useEffect(()=>{getApi()},[])
-
+//TODO : logic to show marker or not, ui to get more or less, customized marker (especially for stacked event)
      return(
         <View style={styles1.container}>
     <Text >test_component</Text>
