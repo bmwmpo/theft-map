@@ -14,7 +14,7 @@ const TestComponent =(prop)=>{
     
 getApi=()=>{
 
-    return fetch('https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=2022&limit=1')
+    return fetch(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=${2022}&limit=1`)
     .then((response)=>response.json())
     .then((json)=>{
         setdata(json.result.records);
@@ -40,7 +40,7 @@ getApi=()=>{
 
 }
  
-useEffect(()=>{getApi()},[])
+useEffect(()=>{getApi()},[]) //map component
 //TODO : logic to show marker or not, ui to get more or less, customized marker (especially for stacked event)
      return(
         <View style={styles1.container}>
