@@ -17,7 +17,7 @@ const TestComponent =(prop)=>{
     // const [data,setdata] = React.useState([])
     const [eventID, setID] = React.useState(-1)
     const [eventCoord, setCoord] = React.useState({latitude: 43.759, longitude: -79.571})
-    const [apiLink, setLink] = React.useState(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=2022&limit=20`)
+    const [apiLink, setLink] = React.useState(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=2022&limit=200`)
     const [CameraRegion,setCamera] = React.useState({
         latitude: 43.653225,
         longitude: -79.383186,
@@ -26,24 +26,41 @@ const TestComponent =(prop)=>{
 
     
 getApi=async()=>{
-    return fetch("https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=2022&limit=200")
+    return fetch(apiLink)
+    // return fetch("https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=2022&limit=200")
     // return fetch(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=58b33705-45f0-4796-a1a7-5762cc152772&limit=1`)
     .then((response)=>response.json())
     .then((json)=>{
+        console.log("start")
+        console.log(apiLink)
         var temp_list = case_list
+        console.log(case_list.length)
+ 
+        //st
+        console.log(999)
+        console.log(temp_list[0].event_id)
         if(temp_list[0].event_id==="DEFAULT_ID"){
             temp_list = []
         }
-        if(json.result.records.length!=0){
+        // console.log(temp_list)
+        if(json.result.records.length!=0){ 
+            console.log("length"+json.result.records.length)
+            // console.log(json.result.records)  test
             json.result.records.map((obj)=>
             temp_list.push(new Case(...Object.values(obj)))
+            // console.log(Object.values(obj))
             )
+            // console.log(temp_list)  
 
             //merge temp list into store
-            setCaseList(temp_list)
+            setCaseList(temp_list)  //TODO : fix zustand
+
             //update link
-            setLink(json.result._links.next)
+            console.log(json.result._links.next)
+            setLink("https://ckan0.cf.opendata.inter.prod-toronto.ca/"+json.result._links.next)
         }
+
+        //en
     })
     .catch((err)=>{
         console.error(err)
@@ -56,18 +73,22 @@ democ=()=>{
 }
 
 //func that call api if link changed
-useEffect(()=>{getApi(),[apiLink]})
-useEffect(()=>{getApi()},[]) //map component
+useEffect(()=>{getApi()},[apiLink])
+// useEffect(()=>{getApi()},[]) //map component
 useEffect(()=>{democ()},[])
+
 //[link]
 
 
 const Marker_list = case_list.map((ele)=>
         <Marker 
             coordinate={ele.geo} 
+            // title={ele.event_id} 
             title={ele.event_id} 
-            description='bike theft'>
-
+            description='bike theft'
+            tracksViewChanges={false}
+            tracksInfoWindowChanges={false} 
+            key={ele.event_id+"_"+ele.id}>
             </Marker>
 )
 

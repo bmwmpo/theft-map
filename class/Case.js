@@ -1,6 +1,7 @@
 export default class Case{
     id=-1
     event_id="DEFAULT_ID"
+    pri_offence="DEFAULT_OFFENCE"
     occ_date="DEFAULT_DATE"
     occ_year=-1
     occ_month="DEFAULT_MONTH"
@@ -27,12 +28,13 @@ export default class Case{
     bike_status="DEFAULT_STATUS"
     geo= {latitude:1.1,longitude:2.2}
 
-    constructor(id,event_id,
+    constructor(id,event_id,pri_offence,
                 occ_date,occ_year,occ_month,occ_dow,occ_day,occ_doy,occ_hour,
                 report_date,report_year,report_month,report_dow,report_day,report_doy,report_hour,
                 division,location_type,premises_type,bike_make,bike_model,bike_type,bike_speed,bike_colour,bike_cost,bike_status,geo){
                     this.id=id
                     this.event_id=event_id
+                    this.pri_offence=pri_offence
                     this.occ_date=occ_date
                     this.occ_year=occ_year
                     this.occ_month=occ_month
@@ -62,6 +64,7 @@ export default class Case{
                 }
 
              geo_translate=(geo)=>{
+                // console.log(geo)  test
                 if(geo.latitude===undefined){
                     var temp_geo = JSON.parse(geo).coordinates
                     this.geo = {latitude:temp_geo[1],longitude:temp_geo[0]}
