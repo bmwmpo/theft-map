@@ -12,12 +12,7 @@ import {shallow} from 'zustand/shallow'
 const TestComponent =(prop)=>{
 
     const{ case_list, setCaseList} = useStore((state)=>state);
-
-
-
     // const {fn,updateF} = useStore()
-
-
     // const count = useRef(0);
     // const [data,setdata] = React.useState([])
     const [eventID, setID] = React.useState(-1)
