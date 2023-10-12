@@ -1,28 +1,32 @@
 import { Component, useEffect, useState, useRef } from "react";
 import { StyleSheet, View, Text, TextInput, Button, Dimensions, Image, Pressable } from "react-native";
 import React from 'react';
+import DropDownPicker from 'react-native-dropdown-picker';
+import useStore from "../zustand/store.js";
 
-const Search_Bar = (prop) => {
+const Drop_Down_Year = (prop) => {
+
+    //for drop down
+    const [items, setItems] = useState([
+        { label: '2021', value: '2021' },
+        { label: '2022', value: '2022' }
+    ]);
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState('2021');
+
+    const { pick_year, setPickYear } = useStore((state) => state);
+
+    useEffect(()=>{setPickYear(value)},[value])
+
     return (
-        <View style={style_bar.container}>
-            <View style={{
-                flex: 0.1, borderColor: 'green',
-                borderWidth: 5,
-                borderStyle: 'solid',
-            }}>
-                <Pressable style={{ color: 'white' }}>
-
-                    <Image style={style_bar.menu_button}
-                        source={
-                            require('../assets/bar_menu_button.png')
-                        } />
-                </Pressable>
-            </View>
-
-            <TextInput style={style_bar.bar} placeholder="Here"></TextInput>
-            <Text style={style_bar.textspacer}>HI</Text>
-        </View>
-
+        <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+        />
     )
 }
 
@@ -63,4 +67,4 @@ const style_bar = StyleSheet.create({
     },
 })
 
-export default Search_Bar
+export default Drop_Down_Year

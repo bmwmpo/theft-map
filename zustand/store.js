@@ -36,10 +36,18 @@ const useStore = create((set) => ({
         "DEFAULT_STATUS",
         "{\"type\": \"Point\", \"coordinates\": [-79.442323077, 43.6390010060001]}")],
 
+        pick_year : 2021,
+
     setCaseList:(caseList)=>
     set((state)=>({
         casue_list:{caseList}
     })),
+
+    setPickYear:(pick_year)=>
+    set((state)=>({
+        pick_year:pick_year
+    })),
+
 }));
 
 
