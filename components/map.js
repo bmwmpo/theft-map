@@ -3,13 +3,13 @@ import { StyleSheet, View, Text, Button, Dimensions } from "react-native";
 import React from 'react';
 import MapView, { Marker, Polygon } from 'react-native-maps';
 import useStore from "../zustand/store.js";
-import Case from "../class/Case";
+import Case from "../class/Case.js";
 import { shallow } from 'zustand/shallow'
 
 
 
 
-const TestComponent = (prop) => {
+const Map = (prop) => {
 
     const api_launch_flag = true
 
@@ -28,55 +28,55 @@ const TestComponent = (prop) => {
         longitudeDelta: 0.0421,
     })
 
-    generate_apiLink=(year)=>{
+    generate_apiLink = (year) => {
         return `https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=${year}&limit=200`
     }
 
     getApi = async () => {
-        
-        if(api_launch_flag ==true){
-        
-        return fetch(apiLink)
-            // return fetch("https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=2022&limit=200")
-            // return fetch(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=58b33705-45f0-4796-a1a7-5762cc152772&limit=1`)
-            .then((response) => response.json())
-            .then((json) => {
-                console.log("start")
-                console.log(apiLink)
-                var temp_list = case_list
-                
-                console.log(case_list.length)
 
-                //st
-                console.log(999)
-                console.log(temp_list[0].event_id)
-                if (temp_list[0].event_id === "DEFAULT_ID") {
-                    temp_list = []
-                }
-                // console.log(temp_list)
-                if (json.result.records.length != 0) {
-                    console.log("length" + json.result.records.length)
-                    // console.log(json.result.records)  test
-                    json.result.records.map((obj) =>
-                        temp_list.push(new Case(...Object.values(obj)))
-                        // console.log(Object.values(obj))
-                    )
-                    // console.log(temp_list)  
+        if (api_launch_flag == true) {
 
-                    //merge temp list into store
-                    setCaseList(temp_list)  //TODO : fix zustand  !!!!!
+            return fetch(apiLink)
+                // return fetch("https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=2022&limit=200")
+                // return fetch(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=58b33705-45f0-4796-a1a7-5762cc152772&limit=1`)
+                .then((response) => response.json())
+                .then((json) => {
+                    console.log("start")
+                    console.log(apiLink)
+                    var temp_list = case_list
 
-                    //update link
-                    console.log(json.result._links.next)
-                    setLink("https://ckan0.cf.opendata.inter.prod-toronto.ca/" + json.result._links.next)
-                }
+                    console.log(case_list.length)
 
-                //end
-            })
-            .catch((err) => {
-                console.error(err)
-            })
-}
+                    //st
+                    console.log(999)
+                    console.log(temp_list[0].event_id)
+                    if (temp_list[0].event_id === "DEFAULT_ID") {
+                        temp_list = []
+                    }
+                    // console.log(temp_list)
+                    if (json.result.records.length != 0) {
+                        console.log("length" + json.result.records.length)
+                        // console.log(json.result.records)  test
+                        json.result.records.map((obj) =>
+                            temp_list.push(new Case(...Object.values(obj)))
+                            // console.log(Object.values(obj))
+                        )
+                        // console.log(temp_list)  
+
+                        //merge temp list into store
+                        setCaseList(temp_list)  //TODO : fix zustand  !!!!!
+
+                        //update link
+                        console.log(json.result._links.next)
+                        setLink("https://ckan0.cf.opendata.inter.prod-toronto.ca/" + json.result._links.next)
+                    }
+
+                    //end
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        }
     }
 
     democ = () => {
@@ -85,25 +85,20 @@ const TestComponent = (prop) => {
 
     //func that call api if link changed
     useEffect(() => { getApi() }, [apiLink])
-    useEffect(()=>{
-        setCaseList(case_list[0])
-        console.log(case_list.length)
-        console.log("bambambam")
-        console.log("year changed")
-        // setLink(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=${pick_year}&limit=200`)
-    },[pick_year])
+    //when change pick year reset case_list and start a new api request with updated link
+    useEffect(() => {
+        setCaseList([case_list[0]])
+        setLink(`https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?resource_id=34e4206d-549e-4957-a0da-093d703a1c62&q=${pick_year}&limit=200`)
+    }, [pick_year])
     // useEffect(()=>{getApi()},[]) //map component
     useEffect(() => { democ() }, [])
 
     //[link]
 
-    //marker ref
-    const markRef = useRef(0)
-
 
     const Marker_list = case_list.map((ele, index) =>
         <Marker
-        // ref = {markRef}
+            // ref = {markRef}
             coordinate={ele.geo}
             // title={ele.event_id} 
             title={ele.event_id + "_" + ele.id}
@@ -132,7 +127,7 @@ const TestComponent = (prop) => {
             >
 
                 <Marker
-                
+
                     coordinate={eventCoord}
                     title="event 1"
                     description='bike theft'></Marker>
@@ -166,4 +161,4 @@ const styles1 = StyleSheet.create({
 
 })
 
-export default TestComponent;
+export default Map;

@@ -40,7 +40,7 @@ const useStore = create((set) => ({
 
     setCaseList:(caseList)=>
     set((state)=>({
-        casue_list:{caseList}
+        case_list:caseList
     })),
 
     setPickYear:(pick_year)=>
