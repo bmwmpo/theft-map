@@ -87,7 +87,6 @@ const TestComponent = (prop) => {
     useEffect(() => { getApi() }, [apiLink])
     useEffect(()=>{
         setCaseList(case_list[0])
-        console.log(case_list[0])
         console.log(case_list.length)
         console.log("bambambam")
         console.log("year changed")
